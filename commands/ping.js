@@ -21,10 +21,9 @@ async function run(client, interaction) {
         m.edit({ embeds: [embed] });
         interaction.reply({
             content: "Done",
-            ephemeral: true,//if true only the one who used the command can see it
+            ephemeral: true,
         });
     } catch (error) {
         return interaction.channel.send(`Algo pasó sry: ${error.message}`);
-        // Restart the bot as usual.
     } 
 }
