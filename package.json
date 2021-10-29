@@ -12,7 +12,7 @@
   "author": "Pelayo Palacio Suárez",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/builders": "^0.7.0",
+    "@discordjs/builders": "^0.8.1",
     "@discordjs/rest": "*",
     "discord-api-types": "^0.23.1",
     "discord.js": "^13.2.0",
