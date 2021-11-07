@@ -1,9 +1,7 @@
-import DiscordJS, { Client, Interaction, Collection, Intents, Options } from 'discord.js';
+import DiscordJS, {Collection, Intents } from 'discord.js';
 import { config } from 'dotenv';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
 import * as fs from 'fs';
 
 config();
@@ -11,36 +9,43 @@ config();
 const allIntents = new Intents(32767);
 const client = new DiscordJS.Client({
     intents: [
-        allIntents
-    ]
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MEMBERS,
+        Intents.FLAGS.DIRECT_MESSAGES,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Intents.FLAGS.GUILD_VOICE_STATES,
+        Intents.FLAGS.GUILD_PRESENCES
+      ],
 });
 
-const guildId = '811605626068533278';
-const clientId = '840554302492639242';
 
 client.on('ready', () => {
     console.log("================");
     console.log('The bot is ready');
     console.log("================");
 
+    const deploy_commands = require(`./deploy-commands.js`);
+    deploy_commands.run();
+
     client.commands = new Collection();
     const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
+    console.log(commandFiles)
     for (const file of commandFiles) {
         const command = require(`./commands/${file}`);
         client.commands.set(command.data.name, command);
     }
 
-
 })
 
 client.on('interactionCreate', async interaction => {
-    const command = client.commands.get(interaction.commandName);
+    if (!interaction.isCommand()) return;
+    const command = interaction.client.commands.get(interaction.commandName);
 
     if (!command) return;
-
+    
     try {
-        await command.execute(client, interaction);
+        await command.execute(interaction.client, interaction);
     } catch (error) {
         console.error(error);
         await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });

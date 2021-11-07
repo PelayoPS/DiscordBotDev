@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.mjs",
   "scripts": {
-    "test": "echo todo",
+    "addition": "node deploy-commands.js",
     "dev": "nodemon index.mjs",
     "watch": "nodemon --watch ."
   },
